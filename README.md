@@ -5,6 +5,20 @@
 
 一个 Claude Code Skill，用于提取微信公众号文章的元数据和内容。支持多种文章类型，包括图文、视频、图片集、语音和转载文章。当用户需要提供微信公众号文章链接（mp.weixin.qq.com）时，Claude 会自动触发此 Skill 来提取文章信息。
 
+## 公众号代读（新增）
+
+收到公众号文章链接即可读取正文并给出个性化解读：**文章主旨 → 关键内容 → 与当前用户相关的价值 → 判断与最小建议**。只发链接也触发，不停留在“收到”。用户背景由宿主的授权记忆按需提供，仓库不内置个人资料。
+
+```bash
+python3 scripts/wechat_public_article_extract.py 'https://mp.weixin.qq.com/s/ARTICLE' --include-text --no-model --no-media
+```
+
+文字路径只需 Python 3.10+ 标准库，无需安装 Node 依赖或模型。退出码 3 是部分可读，需检查 `text_ok` 与媒体状态；不把验证页当正文、不把抽帧当完整视频理解。可选模型和媒体依赖见 [公开读取说明](references/public-reader.md)。
+
+将整个仓库安装至宿主支持的技能目录，入口为 [SKILL.md](SKILL.md)，技能名 `wechat-article-brief`。旧 Node 接口仍保留，旧技能说明见 [legacy-extractor.md](references/legacy-extractor.md)。OpenClaw 安装后用 `openclaw skills check` 核实发现状态；无需重启 Gateway。宿主是否实际选择该技能须在后续真实链接任务中验证。
+
+本地验证：`python3 tests/verify.py` 与 `python3 -m unittest discover -s tests -p 'test_*.py'`。这些是离线回归，不能证明所有线上文章可用。
+
 ## 功能特性
 
 - 解析微信公众号文章 URL (`mp.weixin.qq.com`)

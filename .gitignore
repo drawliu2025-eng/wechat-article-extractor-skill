@@ -70,3 +70,7 @@ logs
 tmp/
 temp/
 *.tmp
+
+# Python reader build artifacts
+__pycache__/
+*.py[cod]
